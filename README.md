@@ -21,11 +21,21 @@ Tasks:
  9.`09_duration_vs_severity.sql` | Does work order duration relate to defect severity? |
  10.`10_cross_plant_comparison.sql` | How do plants compare on output accuracy and defect rate? |
 
-## Findings
+## Answers
 
-_Fill in after running each query — a finding is what it means operationally, not a restatement of the output._
+_Fill in after running each query._
 
-1. **OEE by line:** —
+1. **OEE by line:** — WITH cte AS
+    (
+SELECT line_id,(AVG(actual_qty)/AVG(planned_qty)) as 'ratio'
+FROM work_orders
+GROUP BY line_id)
+
+SELECT *, RANK() OVER(ORDER BY ratio DESC) as 'line_ranking'
+FROM cte
+
+Used CTE to get the ratio first, then used that after to apply RANK() every row based on its ratio value. Difficulty 7/10.
+
 2. **Drift detection:** —
 3. **Defect rate by shift:** —
 4. **Maintenance cost Pareto:** —
